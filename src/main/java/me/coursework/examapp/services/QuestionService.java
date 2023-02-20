@@ -9,7 +9,7 @@ import java.util.Set;
  */
 
 
-public interface JavaQuestionService {
+public interface QuestionService {
 
     /**
      * add new question & answer
@@ -41,5 +41,11 @@ public interface JavaQuestionService {
      */
     Set<Question> getAllQuestion();
 
+    /**
+     * get random question
+     *
+     * @return Set collection random questions
+     */
+    Question getRandomQuestion();
 
 }

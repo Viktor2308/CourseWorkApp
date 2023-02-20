@@ -7,8 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import me.coursework.examapp.model.Question;
-import me.coursework.examapp.services.JavaQuestionService;
+import me.coursework.examapp.services.QuestionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +19,12 @@ import java.util.Set;
 @RestController
 @RequestMapping("/exam/java")
 @Tag(name = "Java questions", description = "CRUD - operations for for working with java question")
+@AllArgsConstructor
 public class QuestionController {
 
-    private final JavaQuestionService javaQuestionService;
+    private final QuestionService javaQuestionService;
 
-    public QuestionController(JavaQuestionService questionService) {
-        this.javaQuestionService = questionService;
-    }
-
-    @PostMapping("/add/{question}/{answer}")
+    @PostMapping("/add/{question},{answer}")
     @Operation(
             summary = "create question",
             description = "create new question/answer"
@@ -43,7 +41,7 @@ public class QuestionController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/remove/{question}/{answer}")
+    @DeleteMapping("/remove/{question},{answer}")
     @Operation(
             summary = "remove question",
             description = "search question and remove"
@@ -58,10 +56,11 @@ public class QuestionController {
     }
     )
     public ResponseEntity<?> deleteRecipe(@PathVariable String question, @PathVariable String answer) {
-        return javaQuestionService.removeQuestion(question,answer)
+        return javaQuestionService.removeQuestion(question, answer)
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping(value = "/")
     @Operation(
             summary = "get all questions",
@@ -90,6 +89,8 @@ public class QuestionController {
     )
     public ResponseEntity<Set<Question>> read() {
         final Set<Question> question = javaQuestionService.getAllQuestion();
-        return new ResponseEntity<>(question, HttpStatus.OK);
+        return question != null
+                ? new ResponseEntity<>(question, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

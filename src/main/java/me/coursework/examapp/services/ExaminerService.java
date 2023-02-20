@@ -6,10 +6,9 @@ import java.util.Set;
 
 public interface ExaminerService {
     /**
-     * get random question
-     *
-     * @param amount random question/answer
-     * @return Set collection random questions
+     * get random amount question
+     * @param amount count of random question
+     * @return collection random question
      */
-    Set<Question> getRandomQuestion(int amount);
+    Set<Question> getQuestion(int amount);
 }

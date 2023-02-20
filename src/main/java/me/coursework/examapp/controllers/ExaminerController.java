@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import me.coursework.examapp.model.Question;
 import me.coursework.examapp.services.ExaminerService;
 import org.springframework.http.HttpStatus;
@@ -21,19 +22,15 @@ import java.util.Set;
 @RestController
 @RequestMapping("/exam/get")
 @Tag(name = "Java exam questions", description = "exam for java")
+@AllArgsConstructor
 public class ExaminerController {
 
     private final ExaminerService examinerService;
 
-
-    public ExaminerController(ExaminerService examinerService) {
-        this.examinerService = examinerService;
-    }
-
     @GetMapping(value = "/{amount}")
     @Operation(
             summary = "get random java questions",
-            description = "get {amound} java question"
+            description = "get amount java question"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -49,15 +46,10 @@ public class ExaminerController {
                                     )
                             )
                     }
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "question not found"
             )
     }
     )
     public ResponseEntity<Set<Question>> read(@PathVariable int amount) {
-        final Set<Question> question = examinerService.getRandomQuestion(amount);
-        return new ResponseEntity<>(question, HttpStatus.OK);
+        return new ResponseEntity<>(examinerService.getQuestion(amount), HttpStatus.OK);
     }
 }
